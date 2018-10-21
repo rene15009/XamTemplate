@@ -1,0 +1,182 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Autofac;
+using Rene.Xam.Extensions.Bootstrapping.Interfaces;
+using Rene.Xam.Extensions.Bootstrapping.Modules;
+using Xamarin.Forms;
+
+namespace Rene.Xam.Extensions.Bootstrapping
+{
+   
+    public static class BoostrapperExtensions
+    {
+        public static IBootstrapper Setup(this Application app)
+        {
+            return new Bootstrapper(app);
+        }
+    }
+
+    public interface IConfigurationOptions
+    {
+        void SetStartUpPage<TViewModel>() where TViewModel : IViewModelBase;
+
+        void SetMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase;
+
+
+        void SetMasterDetailMode<TMenuViewModel, TDetailViewModel>()
+            where TMenuViewModel : IViewModelBase
+            where TDetailViewModel : IViewModelBase;
+
+
+        void SetStartUpPag(Page pageInstance);
+
+
+    }
+    public interface IRegisterView
+    {
+        void RegisterView<TView, TViewModel>() where TViewModel : class, IViewModelBase where TView : Page;
+    }
+
+    public interface IBootstrapper
+    {
+
+        IBootstrapper RegisterDependencies(Action<ContainerBuilder> actionToBuilder);
+
+        IBootstrapper RegisterViews(Action<IRegisterView> register);
+
+        IBootstrapper Configuere(Action<IConfigurationOptions> config);
+
+        void Build();
+    }
+
+    internal class Bootstrapper : IRegisterView, IBootstrapper, IConfigurationOptions
+
+    {
+        private readonly Application _app;
+        private readonly ContainerBuilder _builder;
+        private bool _runedBuildContainer = false;
+
+        private readonly IDictionary<Type, Type> _viewViewModelMaching = new Dictionary<Type, Type>();
+
+        private IViewFactory _viewFactory;
+        private Type _startPageViewModelType;
+        private Type _menuPageViewModelType = null;
+        private Page _startPageInstance;
+
+        internal Bootstrapper(Application app)
+        {
+            _app = app;
+            _builder = new ContainerBuilder();
+            _builder.RegisterModule<DependencyRegistrationModule>();
+        }
+
+        public IBootstrapper RegisterDependencies(Action<ContainerBuilder> actionToBuilder)
+        {
+            actionToBuilder(_builder);
+            return this;
+        }
+
+        public IBootstrapper RegisterViews(Action<IRegisterView> register)
+        {
+            register(this);
+            return this;
+        }
+
+        public IBootstrapper Configuere(Action<IConfigurationOptions> config)
+        {
+            config(this);
+            return this;
+        }
+
+
+        public void Build()
+        {
+            var container = _builder.Build();
+
+
+
+            _runedBuildContainer = true;
+            _viewFactory = container.Resolve<IViewFactory>();
+
+            if (_viewViewModelMaching.Count > 0)
+            {
+                foreach (var k in _viewViewModelMaching.Keys)
+                {
+                    _viewFactory.Register(_viewViewModelMaching[k], k);
+                }
+
+                //    _viewViewModelMaching.Keys
+
+            }
+
+
+            if (_menuPageViewModelType == null && _startPageViewModelType != null)
+            {   
+                var principalPage = _viewFactory.Resolve(_startPageViewModelType);
+                _app.MainPage = principalPage;
+            }
+
+
+            if (_menuPageViewModelType != null) //if _menuPageViewModelType set will be use masterDetail Approach
+            {
+                var menuPage = _viewFactory.Resolve(_menuPageViewModelType);
+                var principalPage = _viewFactory.Resolve(_startPageViewModelType);
+
+                _app.MainPage = new MasterDetailPage()
+                {
+                    Master = menuPage,
+                    Detail = new NavigationPage(principalPage)
+                };
+            }
+
+
+
+
+            //RegisterViews(viewFactory);
+
+            //ConfigureApplication(container);
+        }
+
+        /// <summary>
+        /// Permite asociar un viewmodel a una vista obviando la convención por defecto
+        /// </summary>
+        /// <typeparam name="TViewModel"></typeparam>
+        /// <typeparam name="TView"></typeparam>
+        public void RegisterView<TView, TViewModel>() where TViewModel : class, IViewModelBase where TView : Page
+        {
+            _viewViewModelMaching[typeof(TViewModel)] = typeof(TView);
+
+            //if (!_runedBuildContainer) throw new Exception("Debes ejecutar el método Run antes de asignar las vistas");
+
+            //_viewFactory.Register<TViewModel, TView>();
+
+        }
+
+
+        public void SetStartUpPage<TViewModel>() where TViewModel : IViewModelBase
+        {
+            // https://forums.xamarin.com/discussion/47444/best-practice-mvvm-navigation-using-master-detail-page
+            //https://github.com/adamped/xarch-starter
+            _startPageViewModelType = typeof(TViewModel);
+        }
+
+        public void SetMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase
+        {
+            _menuPageViewModelType = typeof(TMenuViewModel);
+        }
+
+
+        public void SetMasterDetailMode<TMenuViewModel, TDetailViewModel>() where TMenuViewModel : IViewModelBase where TDetailViewModel : IViewModelBase
+        {
+            _startPageViewModelType = typeof(TDetailViewModel);
+            _menuPageViewModelType = typeof(TMenuViewModel);
+        }
+
+
+        public void SetStartUpPag(Page pageInstance) =>
+            _startPageInstance = pageInstance ?? throw new NullReferenceException($"{nameof(pageInstance)} is null");
+
+    }
+}

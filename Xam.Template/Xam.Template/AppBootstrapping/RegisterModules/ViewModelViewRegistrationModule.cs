@@ -18,9 +18,12 @@ namespace Rene.Xam.Extensions.Bootstrapping.Modules
                 .Where(t => t.GetInterfaces().Contains(typeof(IInyectableViewModel)))
                 .AsImplementedInterfaces();
 
+            //TODO: Fix assembly scan. It doesn't work.
 
             builder.RegisterType<MenuViewModel>();
             builder.RegisterType<PruebaViewModel>();
+            builder.RegisterType<PageOneViewModel>();
+            builder.RegisterType<PageTwoViewModel>();
 
 
         }

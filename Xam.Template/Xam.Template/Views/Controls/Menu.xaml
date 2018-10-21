@@ -33,7 +33,7 @@
         <StackLayout Padding="{StaticResource PrincipalContainer}"  >
           
             <StackLayout Orientation="Horizontal" HeightRequest="45" Margin="0,0,0,30">
-                <StackLayout.GestureRecognizers>
+                <!--<StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding LoginLogOut_click}"/>
                 </StackLayout.GestureRecognizers>
                 <Image Source="user.png"  HorizontalOptions="Start"   />
@@ -43,7 +43,7 @@
                 </StackLayout>
                 <StackLayout Orientation="Vertical" IsVisible="{Binding VisibleNoAnonymous, Converter= {converters:InverterBooleanConverter}}" VerticalOptions="Center">
                     <Label Text="{Binding User.FullName}" Style="{StaticResource LabelMenu}" HorizontalOptions="Center" VerticalOptions="Center" />
-                </StackLayout>
+                </StackLayout>-->
             </StackLayout>
 
             <!--<StackLayout IsVisible="{Binding VisibleNoAnonymous, Converter= {c:InverterBooleanConverter}}" Orientation="Horizontal" HeightRequest="45" >
@@ -67,10 +67,10 @@
 
             <StackLayout Orientation="Horizontal" HeightRequest="45" >
                 <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding Expedientes_click}"/>
+                    <TapGestureRecognizer Command="{Binding PageOne_click}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="expediente.png"  HorizontalOptions="Start"   />
-                <Label Text="Expedientes" Style="{StaticResource LabelMenu}" />
+                <Image Source=""  HorizontalOptions="Start"   />
+                <Label Text="Page One" Style="{StaticResource LabelMenu}" />
             </StackLayout>
 
             <BoxView Margin="60, 0, 0, 0" Style="{StaticResource SepatorLineMenu}"/>
@@ -78,10 +78,10 @@
 
             <StackLayout Orientation="Horizontal" HeightRequest="45">
                 <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding Vuelos_click}"/>
+                    <TapGestureRecognizer Command="{Binding PageTwo_click}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="flota.png"  HorizontalOptions="Start"   />
-                <Label Text="Vuelos" Style="{StaticResource LabelMenu}" />
+                <Image Source=""  HorizontalOptions="Start"   />
+                <Label Text="Page Two" Style="{StaticResource LabelMenu}" />
             </StackLayout>
 
             <BoxView  Margin="60, 0, 0,0" Style="{StaticResource SepatorLineMenu}" />
@@ -91,8 +91,8 @@
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding Configuration_click}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="settings.png"  HorizontalOptions="Start"   />
-                <Label Text="Configuracion" Style="{StaticResource LabelMenu}" />
+                <Image Source=""  HorizontalOptions="Start"   />
+                <Label Text="Configuration" Style="{StaticResource LabelMenu}" />
             </StackLayout>
 
             <BoxView Margin="60, 0, 0,0" Style="{StaticResource SepatorLineMenu}"/>
@@ -102,8 +102,8 @@
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding Exit_click}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="logout.png"  HorizontalOptions="Start"   />
-                <Label Text="Salir" Style="{StaticResource LabelMenu}" />
+                <Image Source=""  HorizontalOptions="Start"   />
+                <Label Text="Exit" Style="{StaticResource LabelMenu}" />
             </StackLayout>
 
             <BoxView Margin="60, 0, 0,0" Style="{StaticResource SepatorLineMenu}"/>

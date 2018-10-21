@@ -5,13 +5,13 @@ using Xamarin.Forms;
 
 namespace Rene.Xam.Extensions.Bootstrapping.Services
 {
-	public class Navigator : INavigator
+	public class NavigationService : INavigationService
 	{
 		private readonly Lazy<INavigation> _navigation;
 		private readonly IViewFactory _viewFactory;
 		private INavigation Navigation => _navigation.Value;
 
-		public Navigator(Lazy<INavigation> navigation, IViewFactory viewFactory)
+		public NavigationService(Lazy<INavigation> navigation, IViewFactory viewFactory)
 		{
 			_navigation = navigation;
 			_viewFactory = viewFactory;

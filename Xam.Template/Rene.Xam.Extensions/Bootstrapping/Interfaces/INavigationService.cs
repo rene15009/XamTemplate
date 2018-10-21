@@ -2,7 +2,7 @@
 
 namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
 {
-	public interface INavigator
+	public interface INavigationService
 	{
 		Task PopAsync();
 		Task PopToRootAsync();

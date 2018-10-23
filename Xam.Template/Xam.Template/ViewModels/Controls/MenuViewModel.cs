@@ -69,9 +69,9 @@ namespace Xam.Template.ViewModels.Controls
 
         private void Initialize()
         {
-            PageOne_click = new Command(OnPageOneClick());
+            PageOne_click = new Command(async () => await _navigationService.PushAsync<PageOneViewModel>());
 
-            PageTwo_click = new Command(OnPageTwoClick());
+            PageTwo_click = new Command(async () => await _navigationService.PushAsync<PageTwoViewModel>());
 
             //LoginLogOut_click = new DelegateCommand(OnLoginLogOut_click);
 
@@ -90,16 +90,6 @@ namespace Xam.Template.ViewModels.Controls
 
 
 
-        }
-
-        private Action OnPageTwoClick()
-        {
-            return () => _navigationService.PushAsync<PageTwoViewModel>();
-        }
-
-        private Action OnPageOneClick()
-        {
-            return () => _navigationService.PushAsync<PageOneViewModel>();
         }
 
         #endregion

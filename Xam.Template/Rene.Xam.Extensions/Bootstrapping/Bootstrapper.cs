@@ -96,6 +96,8 @@ namespace Rene.Xam.Extensions.Bootstrapping
             var container = _builder.Build();
 
 
+          
+
 
             _runedBuildContainer = true;
             _viewFactory = container.Resolve<IViewFactory>();
@@ -131,7 +133,17 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 };
             }
 
+            try
+            {
+                var nav = container.Resolve<INavigation>();
 
+                Console.WriteLine(nav.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
 
             //RegisterViews(viewFactory);

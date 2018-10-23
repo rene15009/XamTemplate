@@ -11,7 +11,18 @@ namespace Rene.Xam.Extensions.Bootstrapping.Modules
 		{
 			builder.RegisterType<ViewFactory>().As<IViewFactory>().SingleInstance();
 			builder.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
-			builder.Register<INavigation>(context => Application.Current.MainPage.Navigation).SingleInstance();
+			builder.Register<INavigation>(context =>
+			{
+			    var mp = Application.Current.MainPage;
+
+                if (mp.GetType() == typeof(MasterDetailPage))
+                {
+                    return ((MasterDetailPage) mp).Master.Navigation;
+			    }
+
+			    return Application.Current.MainPage.Navigation;
+
+			}).SingleInstance();
 		}
 	}
 }

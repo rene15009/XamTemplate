@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Rene.Xam.Extensions.Bootstrapping
 {
-   
+
     public static class BoostrapperExtensions
     {
         public static IBootstrapper Setup(this Application app)
@@ -20,17 +20,17 @@ namespace Rene.Xam.Extensions.Bootstrapping
 
     public interface IConfigurationOptions
     {
-        void SetStartUpPage<TViewModel>() where TViewModel : IViewModelBase;
+        void SetStartupView<TViewModel>() where TViewModel : IViewModelBase;
 
-        void SetMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase;
+        void UseMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase;
 
 
-        void SetMasterDetailMode<TMenuViewModel, TDetailViewModel>()
+        void UseMasterDetailMode<TMenuViewModel, TDetailViewModel>()
             where TMenuViewModel : IViewModelBase
             where TDetailViewModel : IViewModelBase;
 
 
-        void SetStartUpPag(Page pageInstance);
+        void SetStartupView(Page pageInstance);
 
 
     }
@@ -96,7 +96,7 @@ namespace Rene.Xam.Extensions.Bootstrapping
             var container = _builder.Build();
 
 
-          
+
 
 
             _runedBuildContainer = true;
@@ -115,9 +115,9 @@ namespace Rene.Xam.Extensions.Bootstrapping
 
 
             if (_menuPageViewModelType == null && _startPageViewModelType != null)
-            {   
+            {
                 var principalPage = _viewFactory.Resolve(_startPageViewModelType);
-                _app.MainPage = principalPage;
+                _app.MainPage = new NavigationPage(principalPage);
             }
 
 
@@ -167,28 +167,29 @@ namespace Rene.Xam.Extensions.Bootstrapping
         }
 
 
-        public void SetStartUpPage<TViewModel>() where TViewModel : IViewModelBase
+        public void SetStartupView<TViewModel>() where TViewModel : IViewModelBase
         {
             // https://forums.xamarin.com/discussion/47444/best-practice-mvvm-navigation-using-master-detail-page
             //https://github.com/adamped/xarch-starter
             _startPageViewModelType = typeof(TViewModel);
         }
 
-        public void SetMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase
+        public void SetStartupView(Page pageInstance) =>
+            _startPageInstance = pageInstance ?? throw new NullReferenceException($"{nameof(pageInstance)} is null");
+
+        public void UseMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase
         {
             _menuPageViewModelType = typeof(TMenuViewModel);
         }
 
 
-        public void SetMasterDetailMode<TMenuViewModel, TDetailViewModel>() where TMenuViewModel : IViewModelBase where TDetailViewModel : IViewModelBase
+        public void UseMasterDetailMode<TMenuViewModel, TDetailViewModel>() where TMenuViewModel : IViewModelBase where TDetailViewModel : IViewModelBase
         {
             _startPageViewModelType = typeof(TDetailViewModel);
             _menuPageViewModelType = typeof(TMenuViewModel);
         }
 
 
-        public void SetStartUpPag(Page pageInstance) =>
-            _startPageInstance = pageInstance ?? throw new NullReferenceException($"{nameof(pageInstance)} is null");
 
     }
 }

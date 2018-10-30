@@ -1,4 +1,4 @@
-﻿using Rene.Xam.Extensions.ViewModelHelper;
+﻿using Rene.Xam.Extensions.Base;
 
 namespace Xam.Template.ViewModels
 {

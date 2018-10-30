@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
+using Rene.Xam.Extensions.Base;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
-using Rene.Xam.Extensions.ViewModelHelper;
 using Xamarin.Forms;
 
 namespace Xam.Template.ViewModels.Controls

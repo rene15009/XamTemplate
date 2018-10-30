@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 
-namespace Rene.Xam.Extensions.ViewModelHelper
+namespace Rene.Xam.Extensions.Base
 {
-    public class ViewModelBase : INotifyPropertyChanged, IViewModelBase,IInyectableViewModel
+    public class ViewModelBase : INotifyPropertyChanged, IViewModelBase, IInyectableViewModel
     {
 
         #region "Propiedades"

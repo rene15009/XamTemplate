@@ -130,6 +130,7 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 {
                     Master = menuPage,
                     Detail = new NavigationPage(principalPage)
+                    
                 };
             }
 
@@ -145,25 +146,16 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 throw;
             }
 
-
-            //RegisterViews(viewFactory);
-
-            //ConfigureApplication(container);
         }
 
         /// <summary>
-        /// Permite asociar un viewmodel a una vista obviando la convención por defecto
+        /// Allow match viewmodel with view avoid default convention
         /// </summary>
         /// <typeparam name="TViewModel"></typeparam>
         /// <typeparam name="TView"></typeparam>
         public void RegisterView<TView, TViewModel>() where TViewModel : class, IViewModelBase where TView : Page
         {
             _viewViewModelMaching[typeof(TViewModel)] = typeof(TView);
-
-            //if (!_runedBuildContainer) throw new Exception("Debes ejecutar el método Run antes de asignar las vistas");
-
-            //_viewFactory.Register<TViewModel, TView>();
-
         }
 
 

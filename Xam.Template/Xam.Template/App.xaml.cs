@@ -34,8 +34,8 @@ namespace Xam.Template
                 {
                     // https://forums.xamarin.com/discussion/47444/best-practice-mvvm-navigation-using-master-detail-page
                     //https://github.com/adamped/xarch-starter
-                  // conf.UseMasterDetailMode<MenuViewModel,PruebaViewModel>();
-                    conf.SetStartupView<PageOneViewModel>();
+                  conf.UseMasterDetailMode<MenuViewModel,PruebaViewModel>();
+                   // conf.SetStartupView<PageOneViewModel>();
                 })
                 .Build();
           

@@ -17,7 +17,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.Modules
 
                 if (mp.GetType() == typeof(MasterDetailPage))
                 {
-                    return ((MasterDetailPage) mp).Master.Navigation;
+                    return ((MasterDetailPage) mp).Detail.Navigation;
 			    }
 
 			    return Application.Current.MainPage.Navigation;

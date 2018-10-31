@@ -3,52 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Rene.Xam.Extensions.Bootstrapping.BootstrapperInterfaces;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 using Rene.Xam.Extensions.Bootstrapping.Modules;
+using Rene.Xam.Extensions.Bootstrapping.Services;
 using Xamarin.Forms;
 
 namespace Rene.Xam.Extensions.Bootstrapping
 {
-
     public static class BoostrapperExtensions
     {
         public static IBootstrapper Setup(this Application app)
         {
             return new Bootstrapper(app);
         }
-    }
-
-    public interface IConfigurationOptions
-    {
-        void SetStartupView<TViewModel>() where TViewModel : IViewModelBase;
-
-        void UseMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase;
-
-
-        void UseMasterDetailMode<TMenuViewModel, TDetailViewModel>()
-            where TMenuViewModel : IViewModelBase
-            where TDetailViewModel : IViewModelBase;
-
-
-        void SetStartupView(Page pageInstance);
-
-
-    }
-    public interface IRegisterView
-    {
-        void RegisterView<TView, TViewModel>() where TViewModel : class, IViewModelBase where TView : Page;
-    }
-
-    public interface IBootstrapper
-    {
-
-        IBootstrapper RegisterDependencies(Action<ContainerBuilder> actionToBuilder);
-
-        IBootstrapper RegisterViews(Action<IRegisterView> register);
-
-        IBootstrapper Configuere(Action<IConfigurationOptions> config);
-
-        void Build();
     }
 
     internal class Bootstrapper : IRegisterView, IBootstrapper, IConfigurationOptions
@@ -69,11 +37,16 @@ namespace Rene.Xam.Extensions.Bootstrapping
         {
             _app = app;
             _builder = new ContainerBuilder();
+
+            //Register AppConfig instance for check configs modes
+            _builder.Register<IAppConfig>(context => new AppConfig(this, _app)).SingleInstance();
+
             _builder.RegisterModule<DependencyRegistrationModule>();
         }
 
         public IBootstrapper RegisterDependencies(Action<ContainerBuilder> actionToBuilder)
         {
+
             actionToBuilder(_builder);
             return this;
         }
@@ -93,10 +66,8 @@ namespace Rene.Xam.Extensions.Bootstrapping
 
         public void Build()
         {
+
             var container = _builder.Build();
-
-
-
 
 
             _runedBuildContainer = true;
@@ -130,22 +101,9 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 {
                     Master = menuPage,
                     Detail = new NavigationPage(principalPage)
-                    
+
                 };
             }
-
-            try
-            {
-                var nav = container.Resolve<INavigation>();
-
-                Console.WriteLine(nav.ToString());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
         }
 
         /// <summary>

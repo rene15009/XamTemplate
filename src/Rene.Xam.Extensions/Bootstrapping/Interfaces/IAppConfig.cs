@@ -17,5 +17,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
 
         void SetDetailPage(Page newView);
 
+        Func<string, string> ViewLocatorConvention { get; }
+
     }
 }

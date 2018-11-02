@@ -1,4 +1,5 @@
-﻿using Rene.Xam.Extensions.Bootstrapping.Interfaces;
+﻿using System;
+using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 using Xamarin.Forms;
 
 namespace Rene.Xam.Extensions.Bootstrapping.Services
@@ -8,8 +9,12 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
         private readonly Bootstrapper _bootstrapper;
         private readonly Application _application;
 
+        
         public Page MainPage => _application?.MainPage;
         public bool IsUsingMasterDetailMode => _application?.MainPage is MasterDetailPage;
+        public Func<string, string> ViewLocatorConvention => _bootstrapper.ViewLocatorConvention;
+
+
         public void ShowHideMenu(bool show)
         {
             if (IsUsingMasterDetailMode)

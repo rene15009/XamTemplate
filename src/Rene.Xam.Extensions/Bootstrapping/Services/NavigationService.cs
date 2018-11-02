@@ -34,8 +34,10 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
             var view = _viewFactory.Resolve<TViewModel>();
 
+            //TODO: Put here logical to Detail change in Mater-Detail mode
             if (_appConfig.IsUsingMasterDetailMode)
             {
+                
                 _appConfig.SetDetailPage(new NavigationPage(view));
                 _appConfig.ShowHideMenu(false);
             }

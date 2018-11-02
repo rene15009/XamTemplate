@@ -9,9 +9,6 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 {
     public class ViewFactory : IViewFactory
     {
-        private Func<string, string> ViewLocatorConvention { get; } = (ViewModelFullName) =>
-            ViewModelFullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
-
 
         private readonly IDictionary<Type, Type> _map = new Dictionary<Type, Type>();
         private readonly IComponentContext _componentContext;

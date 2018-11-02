@@ -24,7 +24,7 @@ namespace Rene.Xam.Extensions.Bootstrapping
     {
         private readonly Application _app;
         private readonly ContainerBuilder _builder;
-        private bool _runedBuildContainer = false;
+        private bool _runedBuildContainer ;
 
         private readonly IDictionary<Type, Type> _viewViewModelMaching = new Dictionary<Type, Type>();
 
@@ -32,6 +32,12 @@ namespace Rene.Xam.Extensions.Bootstrapping
         private Type _startPageViewModelType;
         private Type _menuPageViewModelType = null;
         private Page _startPageInstance;
+
+
+
+        internal Func<string, string> ViewLocatorConvention { get; } = (viewModelFullName) =>
+            viewModelFullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
+
 
         internal Bootstrapper(Application app)
         {

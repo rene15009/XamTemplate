@@ -24,18 +24,18 @@ namespace Rene.Xam.Extensions.Bootstrapping
     {
         private readonly Application _app;
         private readonly ContainerBuilder _builder;
-        private bool _runedBuildContainer ;
+        private bool _runedBuildContainer;
 
         private readonly IDictionary<Type, Type> _viewViewModelMaching = new Dictionary<Type, Type>();
 
         private IViewFactory _viewFactory;
         private Type _startPageViewModelType;
         private Type _menuPageViewModelType = null;
-        private Page _startPageInstance;
+        private Page _startPageInstance = null;
 
 
 
-        internal Func<string, string> ViewLocatorConvention { get; } = (viewModelFullName) =>
+        internal Func<string, string> ViewLocatorConvention { get; private set; } = (viewModelFullName) =>
             viewModelFullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
 
 
@@ -63,7 +63,7 @@ namespace Rene.Xam.Extensions.Bootstrapping
             return this;
         }
 
-        public IBootstrapper Configuere(Action<IConfigurationOptions> config)
+        public IBootstrapper Configure(Action<IConfigurationOptions> config)
         {
             config(this);
             return this;
@@ -76,7 +76,6 @@ namespace Rene.Xam.Extensions.Bootstrapping
             var container = _builder.Build();
 
 
-            _runedBuildContainer = true;
             _viewFactory = container.Resolve<IViewFactory>();
 
             if (_viewViewModelMaching.Count > 0)
@@ -85,20 +84,21 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 {
                     _viewFactory.Register(_viewViewModelMaching[k], k);
                 }
-
-                //    _viewViewModelMaching.Keys
-
             }
 
+            if (_startPageInstance != null)
+            {
+                _app.MainPage = _startPageInstance;
+            }
 
-            if (_menuPageViewModelType == null && _startPageViewModelType != null)
+            else if (_menuPageViewModelType == null && _startPageViewModelType != null)
             {
                 var principalPage = _viewFactory.Resolve(_startPageViewModelType);
                 _app.MainPage = new NavigationPage(principalPage);
             }
 
 
-            if (_menuPageViewModelType != null) //if _menuPageViewModelType set will be use masterDetail Approach
+            else if (_menuPageViewModelType != null) //if _menuPageViewModelType is set, will be use masterDetail Approach
             {
                 var menuPage = _viewFactory.Resolve(_menuPageViewModelType);
                 var principalPage = _viewFactory.Resolve(_startPageViewModelType);
@@ -123,27 +123,43 @@ namespace Rene.Xam.Extensions.Bootstrapping
         }
 
 
-        public void SetStartupView<TViewModel>() where TViewModel : IViewModelBase
+        #region ConfigureOptions
+
+        public IConfigurationOptions SetStartupView<TViewModel>() where TViewModel : IViewModelBase
         {
-            // https://forums.xamarin.com/discussion/47444/best-practice-mvvm-navigation-using-master-detail-page
-            //https://github.com/adamped/xarch-starter
             _startPageViewModelType = typeof(TViewModel);
+            return this;
         }
 
-        public void SetStartupView(Page pageInstance) =>
+        public IConfigurationOptions SetStartupView(Page pageInstance)
+        {
             _startPageInstance = pageInstance ?? throw new NullReferenceException($"{nameof(pageInstance)} is null");
+            return this;
+        }
 
-        public void UseMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase
+        public IConfigurationOptions SetViewLocatorConvention(Func<string, string> viewLocatorConvention)
+        {
+            ViewLocatorConvention = viewLocatorConvention;
+            return this;
+        }
+
+        public IConfigurationOptions UseMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase
         {
             _menuPageViewModelType = typeof(TMenuViewModel);
+            return this;
         }
 
 
-        public void UseMasterDetailMode<TMenuViewModel, TDetailViewModel>() where TMenuViewModel : IViewModelBase where TDetailViewModel : IViewModelBase
+        public IConfigurationOptions UseMasterDetailMode<TMenuViewModel, TDetailViewModel>() where TMenuViewModel : IViewModelBase where TDetailViewModel : IViewModelBase
         {
             _startPageViewModelType = typeof(TDetailViewModel);
             _menuPageViewModelType = typeof(TMenuViewModel);
+            return this;
         }
+
+
+        #endregion
+
 
 
 

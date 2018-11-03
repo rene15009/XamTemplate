@@ -10,7 +10,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.BootstrapperInterfaces
 
         IBootstrapper RegisterViews(Action<IRegisterView> register);
 
-        IBootstrapper Configuere(Action<IConfigurationOptions> config);
+        IBootstrapper Configure(Action<IConfigurationOptions> config);
 
         void Build();
     }

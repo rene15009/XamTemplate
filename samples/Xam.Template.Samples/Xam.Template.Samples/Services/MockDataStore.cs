@@ -6,7 +6,7 @@ using Xam.Template.Samples.Models;
 
 namespace Xam.Template.Samples.Services
 {
-    public class MockDataStore : IDataStore<Item>
+    public class MockDataStore : IDataStore<Item>, IMockDataStore
     {
         List<Item> items;
 

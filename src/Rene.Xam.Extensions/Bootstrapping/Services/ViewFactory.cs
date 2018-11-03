@@ -12,10 +12,12 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
         private readonly IDictionary<Type, Type> _map = new Dictionary<Type, Type>();
         private readonly IComponentContext _componentContext;
+        private readonly IAppConfig _appConfig;
 
-        public ViewFactory(IComponentContext componentContext)
+        public ViewFactory(IComponentContext componentContext, IAppConfig appConfig)
         {
             _componentContext = componentContext;
+            _appConfig = appConfig;
         }
 
         public void Register<TViewModel, TView>() where TViewModel : class, IViewModelBase where TView : Page
@@ -73,8 +75,11 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             else
             {
 
-                var strViewType = type.FullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
-                if (string.IsNullOrEmpty(strViewType)) throw new Exception("No se ha podido inferir en el tipo de la página");
+                //                var strViewType = type.FullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
+
+                var strViewType = _appConfig.ViewLocatorConvention(type.FullName);
+
+                if (string.IsNullOrEmpty(strViewType)) throw new Exception($"Can't resolve view {strViewType} from {viewModel} viewModel");
 
                 var asm = type.Assembly;
                 var typePage = asm.GetType(strViewType);
@@ -88,19 +93,14 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
                     try
                     {
                         return (Page)asm.CreateInstance(strViewType, true);
-
-                        // var obj = Activator.CreateInstance(typePage);
-
-                        //return obj as Page;
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                       if (System.Diagnostics.Debugger.IsAttached) Console.WriteLine(e);
                         throw;
                     }
 
-                    ////asm.cre
-                    ////return asm.CreateInstance(typePage) as Page;
+                    
                 }
             }
         }

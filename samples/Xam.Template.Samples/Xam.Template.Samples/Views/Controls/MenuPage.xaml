@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Xam.Template.Samples.Views.Controls.MenuPage">
+ 
+        <ContentPage.Resources>
+            <ResourceDictionary>
+
+                <Color x:Key="BackgroundGrey">#7C7C7C</Color>
+                <Color x:Key="TextColorWithBacground">#FFFFFF</Color>
+             
+                <!--Separadores-->
+                <Thickness x:Key="PrincipalContainer" Left="15" Top="25" Right="15" Bottom="25"></Thickness>
+
+                <Style x:Key="LabelMenu" TargetType="Label">
+                    <Setter Property="FontSize" Value="Medium" />
+                    <Setter Property="TextColor" Value="{StaticResource TextColorWithBacground}" />
+                    <Setter Property="VerticalOptions" Value="Center" />
+                    <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+                    <Setter Property="Margin" Value="15,0,0,0" />
+                </Style>
+
+                <Style x:Key="SepatorLineMenu" TargetType="BoxView">
+                    <Setter Property="HeightRequest" Value="0.5" />
+                    <Setter Property="Color" Value="#FFFFFF" />
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                </Style>
+            </ResourceDictionary>
+        </ContentPage.Resources>
+
+
+    <ScrollView  Padding="{StaticResource PrincipalContainer}" BackgroundColor="{StaticResource BackgroundGrey}">
+        <StackLayout Padding="{StaticResource PrincipalContainer}"  >
+
+          <StackLayout Orientation="Horizontal" HeightRequest="45" >
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Items_click}"/>
+                </StackLayout.GestureRecognizers>
+                <Label Text="Items" Style="{StaticResource LabelMenu}" />
+            </StackLayout>
+
+            <BoxView Margin="60, 0, 0, 0" Style="{StaticResource SepatorLineMenu}"/>
+
+
+
+            <StackLayout Orientation="Horizontal" HeightRequest="45" >
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding About_click}"/>
+                </StackLayout.GestureRecognizers>
+                <Image Source=""  HorizontalOptions="Start"   />
+                <Label Text="About" Style="{StaticResource LabelMenu}" />
+            </StackLayout>
+
+            <BoxView Margin="60, 0, 0,0" Style="{StaticResource SepatorLineMenu}"/>
+
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

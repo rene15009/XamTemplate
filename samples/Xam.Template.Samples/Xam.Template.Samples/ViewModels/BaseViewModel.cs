@@ -9,7 +9,7 @@ namespace Xam.Template.Samples.ViewModels
 {
     public class BaseViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+     //   public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
 
    
     }

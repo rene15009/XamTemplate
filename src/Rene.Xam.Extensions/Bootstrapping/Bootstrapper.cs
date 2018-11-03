@@ -103,12 +103,22 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 var menuPage = _viewFactory.Resolve(_menuPageViewModelType);
                 var principalPage = _viewFactory.Resolve(_startPageViewModelType);
 
-                _app.MainPage = new MasterDetailPage()
+                    menuPage.Title = " ";
+                try
                 {
-                    Master = menuPage,
-                    Detail = new NavigationPage(principalPage)
+                    _app.MainPage = new MasterDetailPage()
+                    {
+                        Master = menuPage,
+                        Detail = new NavigationPage(principalPage)
 
-                };
+                    };
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    //  throw;
+                }
+
             }
         }
 

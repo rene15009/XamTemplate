@@ -31,16 +31,21 @@ namespace Xam.Template.Samples
                 .Configure(conf =>
                 {
                     // https://forums.xamarin.com/discussion/47444/best-practice-mvvm-navigation-using-master-detail-page
-                    //https://github.com/adamped/xarch-starter
-                    // conf.UseMasterDetailMode<MenuViewModel, ItemsViewModel>();
+                    //https://github.com/adamped/xarch-starterç
+
+
+                    conf
+                        .UseMasterDetailMode<MenuViewModel, ItemsViewModel>()
+                        .SetViewLocatorConvention((s) => s?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", "Page"))
+                        ;
                     // conf.SetStartupView<PageOneViewModel>();
                     //MainPage = new MainPage();
 
-                    conf.SetStartupView(new MainPage());
+                    // conf.SetStartupView(new MainPage());
                 })
                 .Build();
 
-           
+
         }
 
         protected override void OnStart()

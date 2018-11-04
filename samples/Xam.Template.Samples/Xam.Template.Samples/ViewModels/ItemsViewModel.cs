@@ -1,49 +1,45 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
-using Xamarin.Forms;
-
+using Autofac;
+using Rene.Xam.Extensions.Base;
 using Xam.Template.Samples.Models;
 using Xam.Template.Samples.Services;
-using Xam.Template.Samples.Views;
+using Xamarin.Forms;
 
 namespace Xam.Template.Samples.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class ItemsViewModel : ViewModelBase
     {
+        private readonly IComponentContext _componentContext;
         private readonly IMockDataStore _dataStore;
-        public ObservableCollection<Item> Items { get; set; }
-        public Command LoadItemsCommand { get; set; }
 
-        public ItemsViewModel(IMockDataStore dataStore)
+        private string _texto;
+        public string Texto
         {
-            _dataStore = dataStore;
-            Title = "Browse";
-            Items = new ObservableCollection<Item>();
-
-            //LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            ////MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
-            ////{
-            ////    var newItem = item as Item;
-            ////    Items.Add(newItem);
-            ////    await _dataStore.AddItemAsync(newItem);
-            ////});
-
-            var res= _dataStore.GetItemsAsync().GetAwaiter().GetResult();
-            foreach (var v in res)
-            {
-                Items.Add(v);
-            }
-
-            
-
-      //      ExecuteLoadItemsCommand();
+            get => _texto;
+            set => SetProperty(ref _texto, value);
         }
 
-        async Task ExecuteLoadItemsCommand()
+
+        public ObservableCollection<Item> Items { get; set; }=new ObservableCollection<Item>();
+        public Command LoadItemsCommand { get; set; }
+
+        
+        public ItemsViewModel(IMockDataStore dataStore)
+        {
+           
+
+           _dataStore = dataStore;
+
+            LoadItems().GetAwaiter().GetResult();
+
+            Texto = $"{Items?.Count} Items";
+        }
+
+        async Task LoadItems()
         {
             if (IsBusy)
                 return;

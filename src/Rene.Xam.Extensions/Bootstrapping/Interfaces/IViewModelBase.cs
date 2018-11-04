@@ -2,7 +2,7 @@
 
 namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
 {
-	public interface IViewModelBase : INotifyPropertyChanged
+	public interface IViewModelBase 
 	{
 	}
 

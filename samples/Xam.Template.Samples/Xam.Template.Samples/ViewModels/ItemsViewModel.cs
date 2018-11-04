@@ -40,7 +40,9 @@ namespace Xam.Template.Samples.ViewModels
 
         private void OnAddClick()
         {
-          //  MessagingCenter
+            _navigationService.PushModalAsync<NewItemViewModel>();
+
+            //  MessagingCenter
         }
 
         async Task LoadItems()

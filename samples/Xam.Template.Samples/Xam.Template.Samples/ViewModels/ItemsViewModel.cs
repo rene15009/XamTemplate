@@ -15,27 +15,27 @@ namespace Xam.Template.Samples.ViewModels
 {
     public class ItemsViewModel : ViewModelBase
     {
-    
+
         private readonly IMockDataStore _dataStore;
         private readonly INavigationService _navigationService;
 
 
-        public ObservableCollection<Item> Items { get; set; }=new ObservableCollection<Item>();
+        public ObservableCollection<Item> Items { get; set; } = new ObservableCollection<Item>();
         public Command LoadItemsCommand { get; set; }
 
         public ICommand AddClick { get; set; }
 
-        
-        public ItemsViewModel(IMockDataStore dataStore,INavigationService navigationService)
+
+        public ItemsViewModel(IMockDataStore dataStore, INavigationService navigationService)
         {
-           _dataStore = dataStore;
+            _dataStore = dataStore;
             _navigationService = navigationService;
 
             //avoid await/async
             LoadItems().GetAwaiter().GetResult();
 
-            AddClick=new Command(OnAddClick);
-    
+            AddClick = new Command(OnAddClick);
+
         }
 
         private void OnAddClick()

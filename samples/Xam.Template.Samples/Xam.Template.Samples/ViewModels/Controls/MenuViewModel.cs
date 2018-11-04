@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Rene.Xam.Extensions.Base;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 using Xamarin.Forms;
 
 namespace Xam.Template.Samples.ViewModels.Controls
 {
-    public class MenuViewModel : BaseViewModel
+    public class MenuViewModel : ViewModelBase
     {
         public ICommand Items_click { get; set; }
         public ICommand About_click { get; set; }

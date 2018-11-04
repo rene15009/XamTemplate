@@ -40,7 +40,7 @@ namespace Xam.Template.Samples.ViewModels
 
         private void OnAddClick()
         {
-            MessagingCenter
+          //  MessagingCenter
         }
 
         async Task LoadItems()

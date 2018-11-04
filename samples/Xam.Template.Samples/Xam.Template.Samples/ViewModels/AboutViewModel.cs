@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
-
+using Rene.Xam.Extensions.Base;
 using Xamarin.Forms;
 
 namespace Xam.Template.Samples.ViewModels
 {
-    public class AboutViewModel : BaseViewModel
+    public class AboutViewModel : ViewModelBase
     {
         public AboutViewModel()
         {

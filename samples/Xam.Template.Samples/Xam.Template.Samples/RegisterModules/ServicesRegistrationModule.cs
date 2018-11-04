@@ -7,7 +7,7 @@ namespace Xam.Template.Samples.RegisterModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<MockDataStore>().As<IMockDataStore>();
+            builder.RegisterType<MockDataStore>().As<IMockDataStore>().SingleInstance();
 
             base.Load(builder);
         }

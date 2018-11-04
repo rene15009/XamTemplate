@@ -33,7 +33,7 @@ namespace Xam.Template.Samples.ViewModels
            
 
            _dataStore = dataStore;
-
+            //avoid await/async
             LoadItems().GetAwaiter().GetResult();
 
             Texto = $"{Items?.Count} Items";

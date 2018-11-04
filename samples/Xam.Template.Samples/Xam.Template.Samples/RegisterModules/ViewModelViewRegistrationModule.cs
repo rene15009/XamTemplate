@@ -12,18 +12,20 @@ namespace Xam.Template.Samples.RegisterModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var asm = Assembly.GetExecutingAssembly();
+            var asm = Assembly.GetExecutingAssembly();   
+            //TODO: Fix assembly scan. It doesn't work.
             builder
                 .RegisterAssemblyTypes(asm)
                 .Where(t => t.GetInterfaces().Contains(typeof(IInyectableViewModel)))
                 .AsImplementedInterfaces();
 
-            //TODO: Fix assembly scan. It doesn't work.
+         
 
             builder.RegisterType<MenuViewModel>();
             builder.RegisterType<AboutViewModel>();
             builder.RegisterType<ItemsViewModel>();
             builder.RegisterType<ItemDetailViewModel>();
+            builder.RegisterType<NewItemViewModel>();
 
 
         }

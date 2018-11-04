@@ -3,8 +3,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Autofac;
 using Rene.Xam.Extensions.Base;
+using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 using Xam.Template.Samples.Models;
 using Xam.Template.Samples.Services;
 using Xamarin.Forms;
@@ -13,30 +15,32 @@ namespace Xam.Template.Samples.ViewModels
 {
     public class ItemsViewModel : ViewModelBase
     {
-        private readonly IComponentContext _componentContext;
+    
         private readonly IMockDataStore _dataStore;
-
-        private string _texto;
-        public string Texto
-        {
-            get => _texto;
-            set => SetProperty(ref _texto, value);
-        }
+        private readonly INavigationService _navigationService;
 
 
         public ObservableCollection<Item> Items { get; set; }=new ObservableCollection<Item>();
         public Command LoadItemsCommand { get; set; }
 
-        
-        public ItemsViewModel(IMockDataStore dataStore)
-        {
-           
+        public ICommand AddClick { get; set; }
 
+        
+        public ItemsViewModel(IMockDataStore dataStore,INavigationService navigationService)
+        {
            _dataStore = dataStore;
+            _navigationService = navigationService;
+
             //avoid await/async
             LoadItems().GetAwaiter().GetResult();
 
-            Texto = $"{Items?.Count} Items";
+            AddClick=new Command(OnAddClick);
+    
+        }
+
+        private void OnAddClick()
+        {
+            MessagingCenter
         }
 
         async Task LoadItems()

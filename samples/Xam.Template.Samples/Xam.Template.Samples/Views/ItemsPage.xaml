@@ -4,7 +4,7 @@
              x:Class="Xam.Template.Samples.Views.ItemsPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add">
+        <ToolbarItem Text="Add" Command="{Binding AddClick}">
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>

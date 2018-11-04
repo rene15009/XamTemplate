@@ -11,7 +11,7 @@
             <Label Text="Description" FontSize="Medium" />
             <Editor FontSize="Small" Margin="0" /> <!--Text="{Binding Item.Description}"-->
             <StackLayout VerticalOptions="End">
-                <Button Text="Save"></Button>
+                <Button Text="Save" Command="{Binding BtnSaveClick}"></Button>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

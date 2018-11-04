@@ -23,7 +23,7 @@ namespace Xam.Template.Samples.Views
                 Description = "This is an item description."
             };
 
-            BindingContext = this;
+        //    BindingContext = this;
         }
 
         async void Save_Clicked(object sender, EventArgs e)

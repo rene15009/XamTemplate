@@ -37,7 +37,22 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
             Page view = GetView<TViewModel>();
 
+            BindingViewEvents(viewModel, view);
+
             view.BindingContext = viewModel;
+            return view;
+        }
+
+        public Page Resolve<TViewModel, TKArguments>(TKArguments args) where TViewModel : class, IArgumentViewModel<TKArguments>
+        {
+            var viewModel = _componentContext.Resolve<TViewModel>();
+
+            Page view = GetView<TViewModel>();
+
+            BindingViewEvents(viewModel, view);
+
+            view.BindingContext = viewModel;
+            viewModel.FromPreviousPage(args);
             return view;
         }
 
@@ -48,15 +63,38 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
             Page view = GetView(viewModelType);
 
+
+            BindingViewEvents(viewModel as IViewModelBase, view);
+
             view.BindingContext = viewModel;
             return view;
+        }
+
+        public Page Resolve<TKArguments>(Type viewModelType, TKArguments args)
+        {
+            try
+            {
+                var viewModel = _componentContext.Resolve(viewModelType);
+                Page view = GetView(viewModelType);
+
+                BindingViewEvents(viewModel as IViewModelBase, view);
+
+                view.BindingContext = viewModel;
+                (view.BindingContext as IArgumentViewModel<TKArguments>).FromPreviousPage(args);
+                return view;
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                throw ex;
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-	    private Page GetView<TViewModel>()
+        private Page GetView<TViewModel>()
         {
             var type = typeof(TViewModel);
 
@@ -92,18 +130,28 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
                 {
                     try
                     {
+
                         return (Page)asm.CreateInstance(strViewType, true);
                     }
                     catch (Exception e)
                     {
-                       if (System.Diagnostics.Debugger.IsAttached) Console.WriteLine(e);
+                        if (System.Diagnostics.Debugger.IsAttached) Console.WriteLine(e);
                         throw;
                     }
 
-                    
+
                 }
             }
         }
 
+
+        private void BindingViewEvents(IViewModelBase viewModel, Page view)
+        {
+            //TODO: Implementar sistema para detectar cuando es la primera llamada al método ViewLoad
+            if (viewModel is IViewEvents)
+            {
+                view.Appearing += (sender, e) => ((IViewEvents)viewModel).ViewLoad();
+            }
+        }
     }
 }

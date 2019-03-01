@@ -28,29 +28,54 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
         {
             await Navigation.PopToRootAsync();
         }
-
-        public async Task PushAsync<TViewModel>() where TViewModel : class, IViewModelBase
-        {
-
-            var view = _viewFactory.Resolve<TViewModel>();
-
-            //TODO: Put here logical to Detail change in Mater-Detail mode
+        private async Task PushWindow(Page view)
+        {    
             if (_appConfig.IsUsingMasterDetailMode)
             {
-                
-                _appConfig.SetDetailPage(new NavigationPage(view));
+                ((MasterDetailPage)_appConfig.MainPage).Detail = view;
                 _appConfig.ShowHideMenu(false);
             }
             else
             {
                 await Navigation.PushAsync(view);
             }
+        }
+        public async Task PushAsync<TViewModel>() where TViewModel : class, IViewModelBase
+        {
+
+            var view = _viewFactory.Resolve<TViewModel>();
+            await PushWindow(view);
 
         }
 
+        public async Task PushAsync<TViewModel, KArguments>(KArguments args) where TViewModel : class, IArgumentViewModel<KArguments>
+        {
+
+            var view = _viewFactory.Resolve<TViewModel, KArguments>(args);
+            await PushWindow(view);
+
+        }
         public async Task PushModalAsync<TViewModel>() where TViewModel : class, IViewModelBase
         {
             var view = _viewFactory.Resolve<TViewModel>();
+            await Navigation.PushModalAsync(view);
+        }
+
+        public async Task PushAsync(Type viewModelType)
+        {
+            var view = _viewFactory.Resolve(viewModelType);
+            await PushWindow(view);
+        }
+
+        public async Task PushAsync<KArguments>(Type viewModelType, KArguments args)
+        {
+            var view = _viewFactory.Resolve<KArguments>(viewModelType, args);
+            await PushWindow(view);
+        }
+
+        public async Task PushModalAsync<TViewModel, KArguments>(KArguments args) where TViewModel : class, IArgumentViewModel<KArguments>
+        {
+            var view = _viewFactory.Resolve<TViewModel, KArguments>(args);
             await Navigation.PushModalAsync(view);
         }
     }

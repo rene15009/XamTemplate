@@ -4,15 +4,12 @@ namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
 {
 	public interface IViewModelBase 
 	{
+
 	}
 
-    public interface IArgumentViewModel<in TArgument>
+    public interface IArgumentViewModel<in TArgument>: IViewModelBase
     {
-        void OnDataFromCaller(TArgument data);
+        void FromPreviousPage(TArgument data);
     }
 
-    public interface IArgumentViewModel : IArgumentViewModel<object>
-    {
-
-    }
 }

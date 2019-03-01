@@ -34,12 +34,11 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
         {
             var viewModel = _componentContext.Resolve<TViewModel>();
 
-
             Page view = GetView<TViewModel>();
 
-            BindingViewEvents(viewModel, view);
+            BindingViewElements(viewModel, view);
 
-            view.BindingContext = viewModel;
+            //   view.BindingContext = viewModel;
             return view;
         }
 
@@ -49,9 +48,9 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
             Page view = GetView<TViewModel>();
 
-            BindingViewEvents(viewModel, view);
+            BindingViewElements(viewModel, view);
 
-            view.BindingContext = viewModel;
+            //  view.BindingContext = viewModel;
             viewModel.FromPreviousPage(args);
             return view;
         }
@@ -60,13 +59,11 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
         {
             var viewModel = _componentContext.Resolve(viewModelType);
 
-
             Page view = GetView(viewModelType);
 
+            BindingViewElements(viewModel as IViewModelBase, view);
 
-            BindingViewEvents(viewModel as IViewModelBase, view);
-
-            view.BindingContext = viewModel;
+            //view.BindingContext = viewModel;
             return view;
         }
 
@@ -77,10 +74,11 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
                 var viewModel = _componentContext.Resolve(viewModelType);
                 Page view = GetView(viewModelType);
 
-                BindingViewEvents(viewModel as IViewModelBase, view);
+                BindingViewElements(viewModel as IViewModelBase, view);
 
-                view.BindingContext = viewModel;
-                (view.BindingContext as IArgumentViewModel<TKArguments>).FromPreviousPage(args);
+                //  view.BindingContext = viewModel;
+                (view.BindingContext as IArgumentViewModel<TKArguments>)?.FromPreviousPage(args);
+
                 return view;
             }
             catch (Exception ex)
@@ -90,6 +88,8 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             }
         }
 
+
+        #region Private Methods
         /// <summary>
         /// 
         /// </summary>
@@ -108,52 +108,72 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             if (_map.Keys.Contains(type))
             {
                 var viewType = _map[type];
+
                 return _componentContext.Resolve(viewType) as Page;
             }
-            else
+
+
+            var strViewType = _appConfig.ViewLocatorConvention(type.FullName);
+
+            if (string.IsNullOrEmpty(strViewType)) throw new Exception($"Can't resolve view {strViewType} from {viewModel} viewModel");
+
+            var asm = type.Assembly;
+            var typePage = asm.GetType(strViewType) ?? throw new KeyNotFoundException($"Inferred View ({strViewType}) Not Found");
+
+            // if (typePage == null) throw new KeyNotFoundException($"Inferred View ({strViewType}) Not Found");
+
+            if (_componentContext.IsRegistered(typePage))
             {
+                return _componentContext.Resolve(typePage) as Page;
+            }
 
-                //                var strViewType = type.FullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
-
-                var strViewType = _appConfig.ViewLocatorConvention(type.FullName);
-
-                if (string.IsNullOrEmpty(strViewType)) throw new Exception($"Can't resolve view {strViewType} from {viewModel} viewModel");
-
-                var asm = type.Assembly;
-                var typePage = asm.GetType(strViewType);
-
-                if (typePage==null) throw  new KeyNotFoundException($"Infered View ({strViewType}) Not Found");
-
-                if (_componentContext.IsRegistered(typePage))
-                {
-                    return _componentContext.Resolve(typePage) as Page;
-                }
-                else
-                {
-                    try
-                    {
-
-                        return (Page)asm.CreateInstance(strViewType, true);
-                    }
-                    catch (Exception e)
-                    {
-                        if (System.Diagnostics.Debugger.IsAttached) Console.WriteLine(e);
-                        throw;
-                    }
-
-
-                }
+            try
+            {
+                return (Page)asm.CreateInstance(strViewType, true);
+            }
+            catch (Exception e)
+            {
+                if (System.Diagnostics.Debugger.IsAttached) Console.WriteLine(e);
+                throw;
             }
         }
 
 
-        private void BindingViewEvents(IViewModelBase viewModel, Page view)
+
+        private void BindingViewElements(IViewModelBase viewModel, Page view)
         {
-            //TODO: Implementar sistema para detectar cuando es la primera llamada al método ViewLoad
-            if (viewModel is IViewEvents)
+
+            view.BindingContext = viewModel;
+
+            if (view is TabbedPage tabbed)
             {
-                view.Appearing += (sender, e) => ((IViewEvents)viewModel).ViewLoad();
+                BindingTabbetPages(tabbed, viewModel);
             }
+
+
+
+            //TODO: Implementar sistema para detectar cuando es la primera llamada al método ViewLoad
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (viewModel is IViewEvents eventViewModel)
+            {
+                view.Appearing += (sender, e) => eventViewModel?.ViewLoad();
+            }
+
+
+
         }
+
+
+
+        private void BindingTabbetPages(TabbedPage tabbed, IViewModelBase viewModel)
+        {
+            string strTypeFullName = tabbed.GetType().FullName;
+
+            //var strViewType = _appConfig.TabViewModelLocatorConvention (strTypeFullName);
+        }
+
+        #endregion
+
+
     }
 }

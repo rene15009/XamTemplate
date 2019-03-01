@@ -14,11 +14,11 @@ namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
         bool IsUsingMasterDetailMode { get; }
 
         void ShowHideMenu(bool show);
-  
+
         //[Obsolete("No utilizar")]
         //void SetDetailPage(Page newView);
 
-        Func<string, string> ViewLocatorConvention { get; } 
-
+        Func<string, string> ViewLocatorConvention { get; }
+        Func<string, string> TabViewModelLocatorConvention { get; }
     }
 }

@@ -48,10 +48,10 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
         }
 
-        public async Task PushAsync<TViewModel, KArguments>(KArguments args) where TViewModel : class, IArgumentViewModel<KArguments>
+        public async Task PushAsync<TViewModel, TKArguments>(TKArguments args) where TViewModel : class, IArgumentViewModel<TKArguments>
         {
 
-            var view = _viewFactory.Resolve<TViewModel, KArguments>(args);
+            var view = _viewFactory.Resolve<TViewModel, TKArguments>(args);
             await PushWindow(view);
 
         }
@@ -67,15 +67,15 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             await PushWindow(view);
         }
 
-        public async Task PushAsync<KArguments>(Type viewModelType, KArguments args)
+        public async Task PushAsync<TKArguments>(Type viewModelType, TKArguments args)
         {
-            var view = _viewFactory.Resolve<KArguments>(viewModelType, args);
+            var view = _viewFactory.Resolve<TKArguments>(viewModelType, args);
             await PushWindow(view);
         }
 
-        public async Task PushModalAsync<TViewModel, KArguments>(KArguments args) where TViewModel : class, IArgumentViewModel<KArguments>
+        public async Task PushModalAsync<TViewModel, TKArguments>(TKArguments args) where TViewModel : class, IArgumentViewModel<TKArguments>
         {
-            var view = _viewFactory.Resolve<TViewModel, KArguments>(args);
+            var view = _viewFactory.Resolve<TViewModel, TKArguments>(args);
             await Navigation.PushModalAsync(view);
         }
     }

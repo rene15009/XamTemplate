@@ -13,6 +13,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
         public Page MainPage => _application?.MainPage;
         public bool IsUsingMasterDetailMode => _application?.MainPage is MasterDetailPage;
         public Func<string, string> ViewLocatorConvention => _bootstrapper.ViewLocatorConvention;
+        public Func<string, string> TabViewModelLocatorConvention => _bootstrapper.TabViewModelLocatorConvention;
 
 
         public void ShowHideMenu(bool show)

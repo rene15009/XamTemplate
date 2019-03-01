@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
@@ -167,7 +168,23 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
         private void BindingTabbetPages(TabbedPage tabbed, IViewModelBase viewModel)
         {
-            string strTypeFullName = tabbed.GetType().FullName;
+            if (tabbed == null || !tabbed.Children.Any()) return;
+
+            var asm = tabbed.GetType().Assembly;
+
+            foreach (var tab in tabbed.Children)
+            {
+                string strTypeFullName = tab.GetType().FullName;
+
+                var strTabViewModel = _appConfig.TabViewModelLocatorConvention(strTypeFullName);
+
+                var tabViewModel = asm.GetType(strTabViewModel);
+
+                tab.BindingContext = tabViewModel;
+
+            }
+
+
 
             //var strViewType = _appConfig.TabViewModelLocatorConvention (strTypeFullName);
         }

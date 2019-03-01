@@ -1,7 +1,9 @@
 ﻿using Autofac;
+using Rene.Xam.Extensions.Bootstrapping.BootstrapperInterfaces;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 using Rene.Xam.Extensions.Bootstrapping.Services;
 using Xamarin.Forms;
+using DependencyService = Rene.Xam.Extensions.Bootstrapping.Services.DependencyService;
 
 namespace Rene.Xam.Extensions.Bootstrapping.Modules
 {
@@ -11,7 +13,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.Modules
 		{
 			builder.RegisterType<ViewFactory>().As<IViewFactory>().SingleInstance();
 			builder.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
-			builder.Register<INavigation>(context =>
+            builder.Register<INavigation>(context =>
 			{
 			    var mp = Application.Current.MainPage;
 
@@ -23,6 +25,8 @@ namespace Rene.Xam.Extensions.Bootstrapping.Modules
 			    return Application.Current.MainPage.Navigation;
 
 			}).SingleInstance();
-		}
+
+            builder.RegisterType<DependencyService>().As<IDependencyService>().SingleInstance();
+        }
 	}
 }

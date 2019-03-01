@@ -6,7 +6,7 @@ using Rene.Xam.Extensions.Bootstrapping.Interfaces;
 
 namespace Rene.Xam.Extensions.Base
 {
-    public class ViewModelBase : INotifyPropertyChanged, IViewModelBase, IInyectableViewModel
+    public class ViewModelBase : INotifyPropertyChanged, IViewModelBase
     {
 
         #region "Propiedades"
@@ -104,4 +104,5 @@ namespace Rene.Xam.Extensions.Base
         }
         #endregion
     }
+
 }

@@ -21,15 +21,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             {
                 ((MasterDetailPage) MainPage).IsPresented = show;
             }
-        }
-
-        public void SetDetailPage(Page newView)
-        {
-            if (IsUsingMasterDetailMode)
-            {
-                ((MasterDetailPage) MainPage).Detail = newView;
-            }
-        }
+        }     
 
 
         internal AppConfig(Bootstrapper bootstrapper,Application application)

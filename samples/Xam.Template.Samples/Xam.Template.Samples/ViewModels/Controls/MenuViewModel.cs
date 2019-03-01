@@ -15,6 +15,8 @@ namespace Xam.Template.Samples.ViewModels.Controls
         public ICommand Items_click { get; set; }
         public ICommand About_click { get; set; }
 
+        public ICommand Tabs_click { get; set; }
+
 
         private readonly INavigationService _navigationService;
         public MenuViewModel(INavigationService navigationService)
@@ -23,6 +25,7 @@ namespace Xam.Template.Samples.ViewModels.Controls
 
             Items_click= new Command(async () => await _navigationService.PushAsync<ItemsViewModel>());
             About_click = new Command(async () => await _navigationService.PushAsync<AboutViewModel>());
+            Tabs_click = new Command(async () => await _navigationService.PushAsync<TabsSampleViewModel>());
         }
 
 

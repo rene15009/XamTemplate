@@ -122,6 +122,8 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
                 var asm = type.Assembly;
                 var typePage = asm.GetType(strViewType);
 
+                if (typePage==null) throw  new KeyNotFoundException($"Infered View ({strViewType}) Not Found");
+
                 if (_componentContext.IsRegistered(typePage))
                 {
                     return _componentContext.Resolve(typePage) as Page;

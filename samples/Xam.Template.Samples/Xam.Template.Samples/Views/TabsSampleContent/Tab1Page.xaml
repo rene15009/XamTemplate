@@ -5,10 +5,11 @@
              Title="TabWithBinding">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
+            <Entry Text="{Binding Texto}"></Entry>
+            <Label Text="{Binding Texto}"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-            <Entry Text=""></Entry>
+         
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

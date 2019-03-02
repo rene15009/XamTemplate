@@ -176,11 +176,26 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             {
                 string strTypeFullName = tab.GetType().FullName;
 
+                //exclude declarative xaml content tab
+                if (strTypeFullName == null || strTypeFullName.ToLower().StartsWith("xamarin")) continue;
+                
                 var strTabViewModel = _appConfig.TabViewModelLocatorConvention(strTypeFullName);
+                
 
                 var tabViewModel = asm.GetType(strTabViewModel);
 
-                tab.BindingContext = tabViewModel;
+
+                if (_componentContext.IsRegistered(tabViewModel))
+                {
+                    tab.BindingContext = _componentContext.Resolve(tabViewModel);
+                }
+
+                try
+                {
+                    tab.BindingContext = asm.CreateInstance(strTabViewModel, true);
+                }
+                catch{ }
+                // tab.BindingContext = asm.CreateInstance(tabViewModel, true);
 
             }
 

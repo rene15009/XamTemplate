@@ -9,6 +9,6 @@ namespace Xam.Template.Samples.ViewModels
 {
     public class TabsSampleViewModel : ViewModelBase
     {
-        
+       
     }
 }

@@ -15,9 +15,7 @@ namespace Xam.Template.Samples.ViewModels.TabsSampleContent
             get => _texto;
             set => SetProperty(ref _texto, value);
         }
-
-        public string REne { get; set; }
-
+        
         public Tab1PageViewModel()
         {
             

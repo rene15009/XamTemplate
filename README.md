@@ -1,6 +1,6 @@
 ﻿# XamTemplate
 
-XamTemplate is a .NET Standard 2.0 Xamarin Forms micro-framework to help ... TODO: Complete
+XamTemplate is a .NET Standard 2.0 Xamarin Forms micro-framework to help ... TODO: Complete 
 
 ## Inspired in ...
 

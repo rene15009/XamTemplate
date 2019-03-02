@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Rene.Xam.Extensions.Base;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
+using Rene.Xam.Extensions.Bootstrapping.ViewContracts;
 using Xam.Template.Samples.ViewModels;
 using Xam.Template.Samples.ViewModels.Controls;
 using Module = Autofac.Module;

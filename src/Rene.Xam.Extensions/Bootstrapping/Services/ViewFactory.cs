@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
+using Rene.Xam.Extensions.Bootstrapping.ViewContracts;
 using Xamarin.Forms;
 
 namespace Rene.Xam.Extensions.Bootstrapping.Services
@@ -92,9 +93,9 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
         #region Private Methods
         /// <summary>
-        /// 
+        /// Get associate View to ViewModel
         /// </summary>
-        /// <returns></returns>
+        /// <returns>View Instance</returns>
         private Page GetView<TViewModel>()
         {
             var type = typeof(TViewModel);
@@ -102,6 +103,10 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             return GetView(type);
         }
 
+        /// <summary>
+        /// Get associate View to ViewModel
+        /// </summary>
+        /// <returns>View Instance</returns>
         private Page GetView(Type viewModel)
         {
             var type = viewModel;
@@ -143,65 +148,103 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
 
         private void BindingViewElements(IViewModelBase viewModel, Page view)
         {
-
             view.BindingContext = viewModel;
 
-            if (view is TabbedPage tabbed)
-            {
-                BindingTabbetPages(tabbed, viewModel);
-            }
+            BindingIfTabbedPages(view, viewModel);
 
-
-
-            //TODO: Implementar sistema para detectar cuando es la primera llamada al método ViewLoad
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            if (viewModel is IViewEvents eventViewModel)
-            {
-                view.Appearing += (sender, e) => eventViewModel?.ViewLoad();
-            }
+            BindingViewEvents(view, viewModel);
 
 
 
         }
 
 
-
-        private void BindingTabbetPages(TabbedPage tabbed, IViewModelBase viewModel)
+        private void BindingViewEvents(Page view, IViewModelBase viewModel)
         {
-            if (tabbed == null || !tabbed.Children.Any()) return;
+            //TODO: Implementar sistema para detectar cuando es la primera llamada al método ViewLoad
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (viewModel is IViewEvents eventViewModel)
+            {
+                view.Appearing += (sender, e) => eventViewModel?.ViewLoad();
+            }
+        }
 
-            var asm = tabbed.GetType().Assembly;
+
+        /// <summary>
+        /// Binding Tabbed child tabs
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="viewModel"></param>
+        private void BindingIfTabbedPages(Page view, IViewModelBase viewModel)
+        {
+            if (!(view is TabbedPage tabbed)) return;
+
+            if (!tabbed.Children.Any()) return;
+
+            var asm = tabbed.GetType().Assembly; //To create viewmodel instances
+
+            //if viewModel implements ITabbedViewModel storage references to each tab viemodel
+            var tabbedParentPageViewModel = viewModel as ITabbedViewModel;
+            if (tabbedParentPageViewModel != null)
+            {
+                tabbedParentPageViewModel.TabsViewModels = tabbedParentPageViewModel.TabsViewModels ?? new List<IViewModelBase>();
+            }
 
             foreach (var tab in tabbed.Children)
             {
-                string strTypeFullName = tab.GetType().FullName;
+                string strTabTypeFullName = tab.GetType().FullName;
 
-                //exclude declarative xaml content tab
-                if (strTypeFullName == null || strTypeFullName.ToLower().StartsWith("xamarin")) continue;
-                
-                var strTabViewModel = _appConfig.TabViewModelLocatorConvention(strTypeFullName);
-                
+                //exclude declarative xaml contentTab 
+                if (strTabTypeFullName == null || strTabTypeFullName.ToLower().StartsWith("xamarin")) continue;
 
-                var tabViewModel = asm.GetType(strTabViewModel);
+                var strTabViewModel = _appConfig.TabViewModelLocatorConvention(strTabTypeFullName);
 
+                var tabViewModelType = asm.GetType(strTabViewModel);
 
-                if (_componentContext.IsRegistered(tabViewModel))
+                //in this case, view is defined without viewmodel
+                if (tabViewModelType == null)
                 {
-                    tab.BindingContext = _componentContext.Resolve(tabViewModel);
+                    //Maybe is better option throw exception, but this make mandatory define a viewmodel to each tab
+                    if (System.Diagnostics.Debugger.IsAttached)
+                        Console.Error.WriteLine($"Error locate viewmodel {strTabViewModel} to view {strTabTypeFullName}");
+
+                    continue;
                 }
 
-                try
+
+                IViewModelBase tabViewModel = null;
+
+                if (_componentContext.IsRegistered(tabViewModelType))
                 {
-                    tab.BindingContext = asm.CreateInstance(strTabViewModel, true);
+                    tabViewModel = _componentContext.Resolve(tabViewModelType) as IViewModelBase;
                 }
-                catch{ }
-                // tab.BindingContext = asm.CreateInstance(tabViewModel, true);
+                else
+                {
+                    try
+                    {
+                        tabViewModel = asm.CreateInstance(strTabViewModel, true) as IViewModelBase;
+                    }
+                    catch { }
+                }
 
-            }
+                if (tabViewModel == null) continue;
 
 
+                //if viewModel implements ITabbedViewModel has references to each tab viewmodel
+                tabbedParentPageViewModel?.TabsViewModels.Add(tabViewModel);
 
-            //var strViewType = _appConfig.TabViewModelLocatorConvention (strTypeFullName);
+                //if tab implements ITabbedChildTabViewModel has reference to parentView model
+                if (tabViewModel is ITabbedChildTabViewModel childTabViewModel)
+                {
+                    childTabViewModel.ParentViewModel = viewModel;
+                }
+
+                //do a recursive call to bind all elements in child items
+                BindingViewElements(tabViewModel, tab);
+
+            }//end for
+
+
         }
 
         #endregion

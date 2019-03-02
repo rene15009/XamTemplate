@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Bootstrapping\Interfaces\INavigator.cs" />
+    <Compile Remove="Bootstrapping\Services\Navigator.cs" />
     <Compile Remove="Extensions\NavigationExtensions.cs" />
   </ItemGroup>
 

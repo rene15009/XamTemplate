@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Rene.Xam.Extensions.Bootstrapping.ViewContracts;
 
 namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
 {

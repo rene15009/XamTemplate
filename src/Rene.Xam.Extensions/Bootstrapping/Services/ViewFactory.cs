@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
+using Rene.Xam.Extensions.Bootstrapping.ViewContracts;
 using Xamarin.Forms;
 
 namespace Rene.Xam.Extensions.Bootstrapping.Services

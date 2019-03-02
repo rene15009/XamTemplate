@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Rene.Xam.Extensions.Bootstrapping.Interfaces;
+using Rene.Xam.Extensions.Bootstrapping.ViewContracts;
 
 namespace Rene.Xam.Extensions.Base
 {

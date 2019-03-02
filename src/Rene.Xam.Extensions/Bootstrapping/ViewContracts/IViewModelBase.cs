@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
+﻿namespace Rene.Xam.Extensions.Bootstrapping.ViewContracts
 {
 	public interface IViewModelBase 
 	{

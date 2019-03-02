@@ -46,5 +46,12 @@ namespace Rene.Xam.Extensions.Bootstrapping.BootstrapperInterfaces
         /// <returns>IConfigurationOptions to use fluent interface approach </returns>
         IConfigurationOptions SetViewLocatorConvention(Func<string, string> viewLocatorConvention);
 
+        /// <summary>
+        /// Set viewModel locator convention to resolver tabViewmodel echa Tab (chil control) in TabbetPage
+        /// </summary>
+        /// <param name="tabViewModelLocatorConvention">viewModel locator convention</param>
+        /// <returns>IConfigurationOptions to use fluent interface approach </returns>
+        IConfigurationOptions SetTabViewModelLocatorConvention(Func<string, string> tabViewModelLocatorConvention);
+
     }
 }

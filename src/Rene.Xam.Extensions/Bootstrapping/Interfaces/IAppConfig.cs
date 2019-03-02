@@ -15,9 +15,10 @@ namespace Rene.Xam.Extensions.Bootstrapping.Interfaces
 
         void ShowHideMenu(bool show);
 
-        void SetDetailPage(Page newView);
+        //[Obsolete("No utilizar")]
+        //void SetDetailPage(Page newView);
 
         Func<string, string> ViewLocatorConvention { get; }
-
+        Func<string, string> TabViewModelLocatorConvention { get; }
     }
 }

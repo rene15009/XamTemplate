@@ -17,6 +17,9 @@ namespace Rene.Xam.Extensions.Bootstrapping
         {
             return new Bootstrapper(app);
         }
+
+
+
     }
 
     internal class Bootstrapper : IRegisterView, IBootstrapper, IConfigurationOptions
@@ -24,20 +27,17 @@ namespace Rene.Xam.Extensions.Bootstrapping
     {
         private readonly Application _app;
         private readonly ContainerBuilder _builder;
-        private bool _runedBuildContainer;
-
         private readonly IDictionary<Type, Type> _viewViewModelMaching = new Dictionary<Type, Type>();
 
         private IViewFactory _viewFactory;
         private Type _startPageViewModelType;
         private Type _menuPageViewModelType = null;
         private Page _startPageInstance = null;
-
-
-
+        
         internal Func<string, string> ViewLocatorConvention { get; private set; } = (viewModelFullName) =>
             viewModelFullName?.Replace(".ViewModels.", ".Views.").Replace("ViewModel", string.Empty);
-
+        internal Func<string, string> TabViewModelLocatorConvention { get; private set; } = (tabViewFullName) =>
+            $"{tabViewFullName?.Replace(".Views.", ".ViewModels.")}ViewModel"; //.Replace("ViewModel", string.Empty);
 
         internal Bootstrapper(Application app)
         {
@@ -52,7 +52,6 @@ namespace Rene.Xam.Extensions.Bootstrapping
 
         public IBootstrapper RegisterDependencies(Action<ContainerBuilder> actionToBuilder)
         {
-
             actionToBuilder(_builder);
             return this;
         }
@@ -103,7 +102,7 @@ namespace Rene.Xam.Extensions.Bootstrapping
                 var menuPage = _viewFactory.Resolve(_menuPageViewModelType);
                 var principalPage = _viewFactory.Resolve(_startPageViewModelType);
 
-                    menuPage.Title = " ";
+                menuPage.Title = " ";
                 try
                 {
                     _app.MainPage = new MasterDetailPage()
@@ -153,6 +152,12 @@ namespace Rene.Xam.Extensions.Bootstrapping
             return this;
         }
 
+        public IConfigurationOptions SetTabViewModelLocatorConvention(Func<string, string> tabViewModelLocatorConvention)
+        {
+            TabViewModelLocatorConvention = tabViewModelLocatorConvention;
+            return this;
+        }
+        
         public IConfigurationOptions UseMasterDetailMode<TMenuViewModel>() where TMenuViewModel : IViewModelBase
         {
             _menuPageViewModelType = typeof(TMenuViewModel);

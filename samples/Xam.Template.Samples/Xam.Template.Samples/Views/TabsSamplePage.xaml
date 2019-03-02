@@ -2,14 +2,15 @@
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:tabsSampleContent="clr-namespace:Xam.Template.Samples.Views.TabsSampleContent;assembly=Xam.Template.Samples"
-             x:Class="Xam.Template.Samples.Views.TabsSamplePage">
+             x:Class="Xam.Template.Samples.Views.TabsSamplePage"
+            Title="{Binding Title}">
 
 
-    
+
     <!--Pages can be added as references or inline-->
-    <ContentPage Title="Tab 1" />
-    <ContentPage Title="Tab 2" />
-    <ContentPage Title="Tab 3"  />
+    <ContentPage Title="Test">
+        <Label Text="This is a test tab"></Label>
+    </ContentPage>
     <tabsSampleContent:Tab1Page></tabsSampleContent:Tab1Page>
-
+    <tabsSampleContent:TabWithParentReference></tabsSampleContent:TabWithParentReference>
 </TabbedPage>

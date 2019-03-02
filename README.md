@@ -1,5 +1,6 @@
 ﻿# XamTemplate
 
+XamTemplate is a .NET Standard 2.0 Xamarin Forms micro-framework to help ...
 
 ## Inspired in ...
 

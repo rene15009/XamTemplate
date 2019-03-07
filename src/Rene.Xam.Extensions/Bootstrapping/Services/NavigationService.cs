@@ -30,10 +30,13 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             await Navigation.PopToRootAsync();
         }
         private async Task PushWindow(Page view)
-        {    
+        {
             if (_appConfig.IsUsingMasterDetailMode)
             {
-                ((MasterDetailPage)_appConfig.MainPage).Detail = view;
+                //TODO: Resolve Android Back Button
+                var masterDetail = ((MasterDetailPage)_appConfig.MainPage);
+                masterDetail.Detail=new NavigationPage(view);
+
                 _appConfig.ShowHideMenu(false);
             }
             else

@@ -13,6 +13,7 @@ namespace Rene.Xam.Extensions.Bootstrapping.Modules
 		{
 			builder.RegisterType<ViewFactory>().As<IViewFactory>().SingleInstance();
 			builder.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
+		    builder.RegisterType<MessagingService>().As<IMessagingService>().SingleInstance();
             builder.Register<INavigation>(context =>
 			{
 			    var mp = Application.Current.MainPage;

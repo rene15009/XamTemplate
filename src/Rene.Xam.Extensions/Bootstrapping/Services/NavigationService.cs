@@ -25,6 +25,18 @@ namespace Rene.Xam.Extensions.Bootstrapping.Services
             await Navigation.PopAsync();
         }
 
+        public async Task PopModalAsync()
+        {
+            await Navigation.PopModalAsync(false);
+        }
+
+        public async Task PopAllModalsAsync()
+        {
+            while (Navigation.ModalStack.Count > 0)
+                await PopModalAsync();
+        }
+
+
         public async Task PopToRootAsync()
         {
             await Navigation.PopToRootAsync();
